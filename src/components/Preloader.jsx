@@ -17,7 +17,7 @@ const Preloader = ({ progress = 0 }) => {
     const controls = animate(from, target, {
       duration: 0.6,
       ease: [0.16, 1, 0.3, 1],
-      onUpdate: latest => {
+      onUpdate: (latest) => {
         smoothRef.current = latest
         setSmoothProgress(latest)
       },
@@ -59,15 +59,18 @@ const Preloader = ({ progress = 0 }) => {
           </div>
 
           <div className="preloader-text">
-            <span className="preloader-label">Готуємо космічні миті для Матвія…</span>
+            <span className="preloader-label">
+              Готуємо сюрприз: завантажуємо спогади та відео…
+            </span>
             <span className="preloader-percent">{displayPercent}%</span>
           </div>
 
           <div className="preloader-bar">
             <motion.div
               className="preloader-bar-fill"
-              style={{ width: `${smoothProgress}%` }}
               initial={{ width: '0%' }}
+              animate={{ width: `${smoothProgress}%` }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             />
           </div>
         </motion.div>
@@ -77,4 +80,3 @@ const Preloader = ({ progress = 0 }) => {
 }
 
 export default Preloader
-

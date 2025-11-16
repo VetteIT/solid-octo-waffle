@@ -68,15 +68,13 @@ const TimelineSection = ({ mediaItems = [], isLoaded = false }) => {
     return null
   }
 
-  const years = [...new Set(mediaItems.map((item) => item.date.split('-')[0]))]
+  const years = [...new Set(mediaItems.map((item) => item.year || item.date.split('-')[0]))].sort()
 
   return (
     <section id="timeline" ref={sectionRef} className="timeline-section">
       <motion.div
         initial={{ opacity: 0, y: 100, scale: 0.9, filter: 'blur(20px)' }}
-        animate={isLoaded && isInView ? { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' } : { opacity: 0, y: 100, scale: 0.9, filter: 'blur(20px)' }}
-        whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-        viewport={{ once: false, amount: 0.3, margin: '200px 0px 100px 0px' }}
+        animate={isLoaded ? { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' } : { opacity: 0, y: 100, scale: 0.9, filter: 'blur(20px)' }}
         exit={{
           opacity: 0,
           y: -40,
@@ -138,7 +136,11 @@ const TimelineSection = ({ mediaItems = [], isLoaded = false }) => {
               <motion.div
                 key={year}
                 className={`timeline-year ${
-                  mediaItems[activeIndex]?.date.startsWith(year) ? 'active' : ''
+                  String(mediaItems[activeIndex]?.year || mediaItems[activeIndex]?.date.split('-')[0] || '').startsWith(
+                    year,
+                  )
+                    ? 'active'
+                    : ''
                 }`}
                 initial={{ opacity: 0, x: -30, y: -10 }}
                 whileInView={{ opacity: 1, x: 0, y: 0 }}
@@ -371,7 +373,7 @@ const TimelineSection = ({ mediaItems = [], isLoaded = false }) => {
                       whileHover={{ scale: 1.1, x: 3, rotate: 2 }}
                       transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                     >
-                      #{item.date.split('-')[0]}
+                      #{item.year || item.date.split('-')[0]}
                     </motion.span>
                     <motion.span
                       className="tag"

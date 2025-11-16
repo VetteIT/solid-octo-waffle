@@ -81,9 +81,7 @@ const HeroSection = ({ isLoaded = false }) => {
         <motion.div
           className="hero-left"
           initial={{ opacity: 0, y: 150, x: -120, rotate: -25, scale: 0.6, filter: 'blur(25px)' }}
-          animate={isLoaded && isInView ? { opacity: 1, y: 0, x: 0, rotate: 0, scale: 1, filter: 'blur(0px)' } : { opacity: 0, y: 150, x: -120, rotate: -25, scale: 0.6, filter: 'blur(25px)' }}
-          whileInView={{ opacity: 1, y: 0, x: 0, rotate: 0, scale: 1, filter: 'blur(0px)' }}
-          viewport={{ once: false, amount: 0.3, margin: '300px 0px 100px 0px' }}
+          animate={isLoaded ? { opacity: 1, y: 0, x: 0, rotate: 0, scale: 1, filter: 'blur(0px)' } : { opacity: 0, y: 150, x: -120, rotate: -25, scale: 0.6, filter: 'blur(25px)' }}
           exit={{
             opacity: 0,
             y: -60,
@@ -184,7 +182,7 @@ const HeroSection = ({ isLoaded = false }) => {
               whileHover={{ scale: 1.05, x: 2, y: -2 }}
               transition={{ delay: 0.85, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
-              <span>↓</span> Потягни, щоб запустити час
+              <span>↓</span> Скроль, щоб запустити час
             </motion.div>
           </motion.div>
 
@@ -218,9 +216,7 @@ const HeroSection = ({ isLoaded = false }) => {
         <motion.div
           className="hero-right"
           initial={{ opacity: 0, y: 180, x: 150, rotate: 35, scale: 0.4, filter: 'blur(30px)' }}
-          animate={isLoaded && isInView ? { opacity: 1, y: 0, x: 0, rotate: 0, scale: 1, filter: 'blur(0px)' } : { opacity: 0, y: 180, x: 150, rotate: 35, scale: 0.4, filter: 'blur(30px)' }}
-          whileInView={{ opacity: 1, y: 0, x: 0, rotate: 0, scale: 1, filter: 'blur(0px)' }}
-          viewport={{ once: false, amount: 0.3, margin: '300px 0px 100px 0px' }}
+          animate={isLoaded ? { opacity: 1, y: 0, x: 0, rotate: 0, scale: 1, filter: 'blur(0px)' } : { opacity: 0, y: 180, x: 150, rotate: 35, scale: 0.4, filter: 'blur(30px)' }}
           exit={{
             opacity: 0,
             y: 50,

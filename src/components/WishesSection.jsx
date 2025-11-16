@@ -107,7 +107,7 @@ const WishesSection = ({ isLoaded = false }) => {
       <motion.div
         initial={{ opacity: 0, y: 120, scale: 0.85, filter: 'blur(20px)' }}
         animate={
-          isLoaded && isInView
+          isLoaded
             ? { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }
             : { opacity: 0, y: 120, scale: 0.85, filter: 'blur(20px)' }
         }

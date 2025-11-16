@@ -80,9 +80,7 @@ const OutroSection = ({ isLoaded = false }) => {
     >
       <motion.div
         initial={{ opacity: 0, y: 150, scale: 0.8, filter: 'blur(25px)' }}
-        animate={isLoaded && inView ? { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' } : { opacity: 0, y: 150, scale: 0.8, filter: 'blur(25px)' }}
-        whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-        viewport={{ once: false, amount: 0.3, margin: '200px 0px 100px 0px' }}
+        animate={isLoaded ? { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' } : { opacity: 0, y: 150, scale: 0.8, filter: 'blur(25px)' }}
         exit={{
           opacity: 0,
           y: -50,
@@ -103,9 +101,7 @@ const OutroSection = ({ isLoaded = false }) => {
       <motion.div
         className="outro-grid"
         initial={{ opacity: 0 }}
-        animate={isLoaded && inView ? { opacity: 1 } : { opacity: 0 }}
-        whileInView={isLoaded ? { opacity: 1 } : undefined}
-        viewport={{ once: false, amount: 0.2, margin: '200px 0px' }}
+        animate={isLoaded ? { opacity: 1 } : { opacity: 0 }}
         exit={{
           opacity: 0,
           transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
