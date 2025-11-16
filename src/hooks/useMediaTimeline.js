@@ -7,14 +7,18 @@ import starPerformancePoster from '../assets/BirthdayPhotoAndVid/2018-11-20_scie
 const imageExtensions = ['jpg', 'jpeg', 'png', 'webp']
 const videoExtensions = ['mp4', 'webm', 'mov']
 
-const mediaModules = import.meta.glob('../assets/BirthdayPhotoAndVid/*', {
+// Імпортуємо тільки зображення та конвертовані відео (оригінальні відео видалені)
+const mediaModules = import.meta.glob('../assets/BirthdayPhotoAndVid/*.{jpg,jpeg,png,webp}', {
   eager: true,
 })
 
 // Конвертовані відео файли для кращої продуктивності
-const convertedVideos = import.meta.glob('../assets/BirthdayPhotoAndVid/converted/*', {
+const convertedVideos = import.meta.glob('../assets/BirthdayPhotoAndVid/converted/*.mp4', {
   eager: true,
 })
+
+// Додаємо конвертовані відео до загального списку медіа
+const allMediaModules = { ...mediaModules, ...convertedVideos }
 
 // Опис кожного файлу — щоб картки мали осмислені заголовки й тексти.
 const mediaDescriptions = {
@@ -115,7 +119,9 @@ const parseEntry = (filePath, module) => {
   const fileName = filePath.split('/').pop()
   if (!fileName) return null
 
-  const match = fileName.match(/^(\d{4}-\d{2}-\d{2})[_-](.+)\.(\w+)$/i)
+  // Обробляємо конвертовані відео (видаляємо -converted з імені для пошуку в mediaDescriptions)
+  const originalFileName = fileName.replace('-converted.mp4', '.mp4')
+  const match = originalFileName.match(/^(\d{4}-\d{2}-\d{2})[_-](.+)\.(\w+)$/i)
   if (!match) return null
 
   const [, date, rawLabel, ext] = match
@@ -128,29 +134,22 @@ const parseEntry = (filePath, module) => {
 
   if (!type) return null
 
-  // Перевіряємо, чи є конвертована версія відео
+  // Всі відео тепер використовують конвертовані версії
   let src = module?.default ?? module
-  if (type === 'video') {
-    const convertedFileName = fileName.replace('.mp4', '-converted.mp4')
-    const convertedPath = `../assets/BirthdayPhotoAndVid/converted/${convertedFileName}`
-    const convertedModule = convertedVideos[convertedPath]
-    if (convertedModule) {
-      src = convertedModule?.default ?? convertedModule
-    }
-  }
 
-  const meta = mediaDescriptions[fileName] || {}
+  // Використовуємо оригінальне ім'я файлу для пошуку метаданих
+  const meta = mediaDescriptions[originalFileName] || {}
 
   return {
-    id: fileName,
+    id: originalFileName, // Використовуємо оригінальне ім'я для ID
     src,
     type,
     date,
     displayDate: formatDate(date),
-    label: formatLabel(rawLabel, fileName),
+    label: formatLabel(rawLabel, originalFileName),
     description:
       meta.description ||
-      `${formatLabel(rawLabel, fileName)} — теплий момент, який залишився з тобою назавжди.`,
+      `${formatLabel(rawLabel, originalFileName)} — теплий момент, який залишився з тобою назавжди.`,
     poster: meta.poster,
     timestamp: new Date(date).getTime(),
   }
@@ -158,7 +157,7 @@ const parseEntry = (filePath, module) => {
 
 const useMediaTimeline = () =>
   useMemo(() => {
-    const parsedItems = Object.entries(mediaModules)
+    const parsedItems = Object.entries(allMediaModules)
       .map(([path, mod]) => parseEntry(path, mod))
       .filter(Boolean)
       .sort((a, b) => a.timestamp - b.timestamp)
